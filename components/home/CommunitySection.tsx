@@ -22,7 +22,6 @@ const CommunitySection = () => {
         </div>
       </section>
 
-      {/* Three-Column Feature Section */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 max-w-7xl mx-auto pb-16">
         {/* Card 1 */}
         <div className="relative rounded-2xl overflow-hidden shadow-lg bg-white flex flex-col justify-end min-h-[550px]">
