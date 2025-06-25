@@ -90,7 +90,9 @@ const LoginForm: React.FC = () => {
 
           <button
             type="submit"
-            className={`w-full p-4 font-bold text-white text-base tracking-wider relative group overflow-hidden ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full p-4 font-bold text-white text-base tracking-wider relative group overflow-hidden ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={loading}
           >
             <div className="absolute h-[10px] -bottom-[10px] left-[5px] right-[-5px] transform -skew-x-[45deg] bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
@@ -99,7 +101,13 @@ const LoginForm: React.FC = () => {
             <div className="absolute inset-[2px] bg-[#212121] group-hover:top-full group-hover:bg-white/50 transition-all duration-200 z-0" />
             <span className="relative z-10 flex items-center justify-center min-h-[24px]">
               {loading ? (
-                <Image src="/Logo1.png" alt="Loading" width={24} height={24} className="animate-spin" />
+                <Image
+                  src="/Logo1.png"
+                  alt="Loading"
+                  width={24}
+                  height={24}
+                  className="animate-spin"
+                />
               ) : (
                 "Log In"
               )}
@@ -114,6 +122,8 @@ const LoginForm: React.FC = () => {
                     credentialResponse.credential
                   );
                   try {
+                    console.log("Sending to backend:", userData);
+
                     const res = await fetch("/api/google-signin", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
