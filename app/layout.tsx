@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import LoadingCursorProvider from "@/components/LoadingCursorProvider";
 
 export const metadata: Metadata = {
   title: "6.AM",
@@ -14,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <LoadingCursorProvider />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
