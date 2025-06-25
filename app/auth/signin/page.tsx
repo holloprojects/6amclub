@@ -125,7 +125,6 @@ const LoginForm: React.FC = () => {
                 }
 
                 try {
-                  // Send raw JWT to your backend for verification
                   const res = await fetch("/api/google-signin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
