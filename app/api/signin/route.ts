@@ -3,11 +3,19 @@ import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const uri = process.env.MONGODB_URI!;
-const client = new MongoClient(uri);
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
-
 export async function POST(req: NextRequest) {
+  const uri = process.env.MONGODB_URI;
+  const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
+
+  if (!uri) {
+    return NextResponse.json({
+      success: false,
+      error: "MONGODB_URI environment variable is not set.",
+    }, { status: 500 });
+  }
+
+  const client = new MongoClient(uri);
+
   try {
     const { username, password } = await req.json();
     if (!username || !password) {
@@ -36,8 +44,12 @@ export async function POST(req: NextRequest) {
     });
     return response;
   } catch (error) {
-    return NextResponse.json({ success: false, error: error instanceof Error ? error.message : error });
+    return NextResponse.json({ success: false, error: error instanceof Error ? error.message : error }, { status: 500 });
   } finally {
-    await client.close();
+    try {
+      await client.close();
+    } catch (e) {
+      // Ignore close errors
+    }
   }
 } 
