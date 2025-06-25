@@ -139,7 +139,7 @@ export default function EventsPage() {
                       className="object-cover pl-[300px]"
                     />
                   </div>
-                  {/* Text Overlay */}
+
                   <div className="absolute inset-0 flex items-center justify-start p-8 md:p-12 lg:p-16">
                     <div className="max-w-2xl">
                       <h2 className="font-alfa text-4xl font-thin leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-black to-white sm:text-5xl md:text-6xl lg:text-8xl drop-shadow-lg">
