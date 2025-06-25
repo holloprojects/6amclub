@@ -117,32 +117,31 @@ const LoginForm: React.FC = () => {
           <div className="mt-6 flex flex-col gap-2 justify-center">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
-                if (credentialResponse.credential) {
-                  const userData: any = jwtDecode(
-                    credentialResponse.credential
-                  );
-                  try {
-                    console.log("Sending to backend:", userData);
+                const credential = credentialResponse.credential;
 
-                    const res = await fetch("/api/google-signin", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      credentials: "include",
-                      body: JSON.stringify(userData),
-                    });
-                    const result = await res.json();
-                    console.log(result);
-
-                    if (result.success) {
-                      window.location.href = "/";
-                    } else {
-                      console.error("Server error:", result.error);
-                    }
-                  } catch (err) {
-                    console.error("Failed to save user to MongoDB:", err);
-                  }
-                } else {
+                if (!credential) {
                   console.log("No credential received");
+                  return;
+                }
+
+                try {
+                  // Send raw JWT to your backend for verification
+                  const res = await fetch("/api/google-signin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ credential }),
+                  });
+
+                  const result = await res.json();
+
+                  if (result.success) {
+                    window.location.href = "/";
+                  } else {
+                    console.error("Server error:", result.error);
+                  }
+                } catch (err) {
+                  console.error("Failed to send credential to backend:", err);
                 }
               }}
               onError={() => console.log("Google login failed")}

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import { Header } from "@/components/layout/header";
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
-import Link from 'next/link';
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
@@ -36,7 +36,10 @@ const SignupForm = () => {
     <GoogleOAuthProvider clientId="257516674558-mura8vic91p11abmhqbn0ghh1nomujnp.apps.googleusercontent.com">
       <div>
         <Header />
-        <form onSubmit={handleSignup} className="w-[300px] mx-auto flex flex-col h-screen justify-center px-4 text-white font-mono">
+        <form
+          onSubmit={handleSignup}
+          className="w-[300px] mx-auto flex flex-col h-screen justify-center px-4 text-white font-mono"
+        >
           <div className="mb-6">
             <h1 className="text-xl tracking-wider">Sign Up</h1>
           </div>
@@ -46,7 +49,7 @@ const SignupForm = () => {
               name="username"
               placeholder="Username"
               value={username}
-              onChange={e => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full p-4 bg-transparent border-none outline-none z-10 relative text-white tracking-wide text-base"
             />
             {/* Decorative layers */}
@@ -61,7 +64,7 @@ const SignupForm = () => {
               name="password"
               placeholder="Password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-4 bg-transparent border-none outline-none z-10 relative text-white tracking-wide text-base"
             />
             <div className="absolute h-[10px] -bottom-[10px] left-[5px] right-[-5px] transform -skew-x-[45deg] bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
@@ -81,33 +84,55 @@ const SignupForm = () => {
           </button>
           <div className="mt-4 flex flex-col gap-2">
             <GoogleLogin
-              onSuccess={async credentialResponse => {
-                if (credentialResponse.credential) {
-                  const userData = jwtDecode(credentialResponse.credential);
-                  try {
-                    const res = await fetch('/api/google-signin', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(userData),
-                    });
-                    const result = await res.json();
-                    setMessage('Google signup successful!');
-                  } catch (err) {
-                    setMessage('Failed to sign up with Google.');
+              onSuccess={async (credentialResponse) => {
+                const credential = credentialResponse.credential;
+
+                if (!credential) {
+                  setMessage("No credential received from Google.");
+                  return;
+                }
+
+                try {
+                  const res = await fetch("/api/google-signin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ credential }),
+                  });
+
+                  const result = await res.json();
+
+                  if (result.success) {
+                    setMessage("Google signup successful!");
+                    // Optional: redirect to homepage or dashboard
+                    // window.location.href = "/";
+                  } else {
+                    setMessage(
+                      "Server error: " + (result.error || "Unknown error")
+                    );
                   }
-                } else {
-                  setMessage('No credential received from Google.');
+                } catch (err) {
+                  setMessage("Failed to sign up with Google.");
                 }
               }}
-              onError={() => setMessage('Google signup failed.')}
+              onError={() => setMessage("Google signup failed.")}
               width="100%"
               theme="filled_black"
               text="signup_with"
               shape="pill"
             />
-            <Link href="/auth/signin" className="text-center text-blue-400 underline">Already have an account? Sign in</Link>
+
+            <Link
+              href="/auth/signin"
+              className="text-center text-blue-400 underline"
+            >
+              Already have an account? Sign in
+            </Link>
           </div>
-          {message && <div className="mt-4 text-center text-sm text-white bg-black/50 p-2 rounded">{message}</div>}
+          {message && (
+            <div className="mt-4 text-center text-sm text-white bg-black/50 p-2 rounded">
+              {message}
+            </div>
+          )}
         </form>
       </div>
     </GoogleOAuthProvider>
