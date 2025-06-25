@@ -4,11 +4,20 @@ import { Header } from "@/components/layout/header";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
+
+  // Redirect if already logged in (cookie set by server)
+  React.useEffect(() => {
+    if (typeof document !== "undefined" && document.cookie.includes("token=")) {
+      router.replace("/");
+    }
+  }, [router]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,9 +30,8 @@ const SignupForm = () => {
       });
       const data = await res.json();
       if (data.success) {
-        setMessage("Signup successful! You can now log in.");
-        setUsername("");
-        setPassword("");
+        // After successful signup, redirect to home
+        router.push("/");
       } else {
         setMessage(data.error || "Signup failed.");
       }
@@ -102,9 +110,8 @@ const SignupForm = () => {
                   const result = await res.json();
 
                   if (result.success) {
-                    setMessage("Google signup successful!");
-                    // Optional: redirect to homepage or dashboard
-                    // window.location.href = "/";
+                    // Google signup successful, redirect to home
+                    window.location.href = "/";
                   } else {
                     setMessage(
                       "Server error: " + (result.error || "Unknown error")
