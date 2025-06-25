@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const client = new MongoClient(uri);
 
   try {
-    const { username, password } = await req.json();
+    const { username, password, phone } = await req.json();
     if (!username || !password) {
       return NextResponse.json({ success: false, error: "Username and password are required." }, { status: 400 });
     }
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await users.insertOne({ username, password: hashedPassword, createdAt: new Date() });
+    const result = await users.insertOne({ username, password: hashedPassword, phone, createdAt: new Date() });
     return NextResponse.json({ success: true, userId: result.insertedId });
   } catch (error) {
     return NextResponse.json({ success: false, error: error instanceof Error ? error.message : error }, { status: 500 });

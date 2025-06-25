@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   // Redirect if already logged in (cookie set by server)
@@ -22,21 +24,24 @@ const SignupForm = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+    setLoading(true);
     try {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, phone, password }),
       });
       const data = await res.json();
       if (data.success) {
-        // After successful signup, redirect to home
-        router.push("/");
+        // After successful signup, redirect to signin
+        router.push("/auth/signin");
       } else {
         setMessage(data.error || "Signup failed.");
       }
     } catch (err) {
       setMessage("Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,6 +71,21 @@ const SignupForm = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
             <div className="absolute inset-[2px] bg-[#212121] z-0 group-focus-within:bg-white/50 transition-all duration-200" />
           </div>
+          {/* Phone number input */}
+          <div className="mb-6 relative group">
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full p-4 bg-transparent border-none outline-none z-10 relative text-white tracking-wide text-base"
+            />
+            <div className="absolute h-[10px] -bottom-[10px] left-[5px] right-[-5px] transform -skew-x-[45deg] bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
+            <div className="absolute top-[-5px] left-full w-[10px] bottom-[5px] transform -skew-y-[45deg] bg-[#00d4ff]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
+            <div className="absolute inset-[2px] bg-[#212121] z-0 group-focus-within:bg-white/50 transition-all duration-200" />
+          </div>
           <div className="mb-6 relative group">
             <input
               type="password"
@@ -82,13 +102,26 @@ const SignupForm = () => {
           </div>
           <button
             type="submit"
-            className="w-full p-4 font-bold text-white text-base tracking-wider relative group overflow-hidden"
+            className={`w-full p-4 font-bold text-white text-base tracking-wider relative group overflow-hidden ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
           >
             <div className="absolute h-[10px] -bottom-[10px] left-[5px] right-[-5px] transform -skew-x-[45deg] bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
             <div className="absolute top-[-5px] left-full w-[10px] bottom-[5px] transform -skew-y-[45deg] bg-[#00d4ff]" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#020024] via-[#340979] to-[#00d4ff]" />
             <div className="absolute inset-[2px] bg-[#212121] group-hover:top-full group-hover:bg-white/50 transition-all duration-200 z-0" />
-            <span className="relative z-10">Sign Up</span>
+            <span className="relative z-10 flex items-center justify-center min-h-[24px]">
+              {loading ? (
+                <img
+                  src="/Logo1.png"
+                  alt="Loading"
+                  width={24}
+                  height={24}
+                  className="animate-spin"
+                />
+              ) : (
+                "Sign Up"
+              )}
+            </span>
           </button>
           <div className="mt-4 flex flex-col gap-2">
             <GoogleLogin
