@@ -1,5 +1,3 @@
-export const runtime = "nodejs";
-
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import jwt from "jsonwebtoken";
