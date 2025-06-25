@@ -358,7 +358,6 @@ export default function AdAstraPage() {
           </div>
         </div>
 
-        {/* Section 5 */}
         <div className="section h-screen flex text-black flex-col justify-center items-center mix-blend-difference relative">
           <div className="flex flex-col gap-4 text-center max-w-lg mx-auto z-[100] mix-blend-difference">
             <h1 className="text-6xl md:text-8xl font-light leading-tight tracking-wide uppercase mix-blend-difference text-white">
