@@ -19,7 +19,7 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <video
           ref={videoRef}
-          src="/video/Hero.webm"
+          src="/video/Hero.mp4"
           autoPlay
           muted={isMuted}
           className="absolute inset-0 object-cover w-full h-full"

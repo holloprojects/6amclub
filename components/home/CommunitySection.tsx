@@ -8,17 +8,16 @@ const CommunitySection = () => {
       {/* Headline Section */}
       <section className="text-center py-16 px-4">
         <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-4">
-          Creative Projects with <br />
-          the Ultimate AI-Powered Pattern
+          Join the Run —<br />
+          Empower Your Stride with Our Club
         </h1>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
           <button className="bg-black text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg">
-            START GENERATING
+            JOIN THE CLUB
           </button>
           <span className="text-lg text-white">
-            The Next generation{" "}
-            <span className="font-bold text-white">Production</span> for
-            Designers
+            A Community for Every{" "}
+            <span className="font-bold text-white">Runner</span>
           </span>
         </div>
       </section>
